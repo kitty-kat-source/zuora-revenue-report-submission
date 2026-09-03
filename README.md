@@ -10,6 +10,8 @@ cd zuora-revenue-report-submission
 .\setup\setup.ps1
 ```
 
+**Important:** run `setup.ps1` from the **git clone**, not from `%USERPROFILE%\.cursor\skills\zuora-revenue-report-submission\`. Running from the installed skill folder can corrupt files (e.g. `ensure_tools.py` becoming a directory).
+
 Then **only edit credentials** in `%USERPROFILE%\.cursor\mcp.json`:
 
 ```json
