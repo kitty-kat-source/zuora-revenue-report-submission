@@ -1,0 +1,44 @@
+# NeMo Guardrails config for Zuora Revenue Report Submission skill.
+# Action + regex rails only — no LLM backend required.
+
+rails:
+  config:
+    regex_detection:
+      input:
+        case_insensitive: true
+        patterns:
+          # Credential / secret extraction attempts
+          - "(?i)(client[_\\s-]?secret|client[_\\s-]?id).*mcp\\.json"
+          - "(?i)read\\s+(the\\s+)?mcp\\.json"
+          - "(?i)(extract|pull|grab|steal|dump).*(credential|secret|token|oauth)"
+          - "(?i)zuora_auth\\.json"
+          # Bypass MCP / alternate Zuora access
+          - "(?i)(zuora_client|zuora[_\\s-]?rest|direct\\s+rest).*(submit|poll|download)"
+          - "(?i)(token-free|bypass\\s+mcp|without\\s+mcp)"
+          - "(?i)create.*zuora_client\\.py"
+          # Destructive governance / sheet ops without explicit user ask
+          - "(?i)(truncate|delete|wipe|clear)\\s+(audit\\.jsonl|governance)"
+          - "(?i)force\\s+push.*main"
+      output:
+        case_insensitive: true
+        patterns:
+          # Leaked presigned URLs / auth material in chat
+          - "X-Amz-Signature="
+          - "X-Amz-Credential="
+          - "presignedUrl\\?[^\\s\"']+"
+          - "(?i)(Authorization:\\s*Bearer\\s+\\S+)"
+          - "(?i)(CLIENT_SECRET|CLIENT_ID)\\s*[:=]\\s*\\S+"
+          - "(?i)-----BEGIN (RSA )?PRIVATE KEY-----"
+          # Full MCP JSON dumps (token burn)
+          - "\\{\\s*\"operation\"\\s*:\\s*\"get_revenue_report_run_status\".*\"data\"\\s*:\\s*\\{"
+
+  input:
+    flows:
+      - regex check input
+      - zuora check user intent
+      - zuora check planned action
+
+  output:
+    flows:
+      - regex check output
+      - zuora check agent output

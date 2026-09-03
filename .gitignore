@@ -1,0 +1,21 @@
+# Secrets — never commit
+mcp.json
+*.env
+.env.*
+**/credentials*.json
+**/zuora_auth.json
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local runtime (not part of skill package)
+C:\Zuora_Reports\

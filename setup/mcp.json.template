@@ -1,0 +1,31 @@
+{
+  "mcpServers": {
+    "zuora-mcp": {
+      "url": "https://sandbox.na.zuora.com/mcp",
+      "auth": {
+        "CLIENT_ID": "REPLACE_WITH_YOUR_ZUORA_CLIENT_ID",
+        "CLIENT_SECRET": "REPLACE_WITH_YOUR_ZUORA_CLIENT_SECRET"
+      }
+    },
+    "google-sheets-official": {
+      "url": "https://sheetsmcp.googleapis.com/mcp/v1",
+      "auth": {
+        "CLIENT_ID": "${env:GOOGLE_SHEETS_OAUTH_CLIENT_ID}",
+        "CLIENT_SECRET": "${env:GOOGLE_SHEETS_OAUTH_CLIENT_SECRET}",
+        "scopes": [
+          "https://www.googleapis.com/auth/spreadsheets",
+          "https://www.googleapis.com/auth/spreadsheets.readonly",
+          "https://www.googleapis.com/auth/drive.file",
+          "https://www.googleapis.com/auth/drive.readonly"
+        ]
+      }
+    },
+    "google-sheets-api": {
+      "command": "npx",
+      "args": ["-y", "mcp-google-sheets-full"],
+      "env": {
+        "GSHEETS_CONFIG_DIR": "REPLACE_WITH_YOUR_HOME\\.mcp-google-sheets"
+      }
+    }
+  }
+}

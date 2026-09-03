@@ -1,0 +1,26 @@
+define bot refuse zuora policy
+  "Blocked by Zuora Revenue skill guardrails: request violates MCP-only, governance, or batch safety policy. See SKILL.md agent guardrails."
+
+define bot refuse zuora output
+  "Blocked by Zuora Revenue skill guardrails: output may leak credentials, presigned URLs, or premature batch results."
+
+define bot refuse zuora action
+  "Blocked by Zuora Revenue skill guardrails: planned action is not on the skill allowlist."
+
+define flow zuora check user intent
+  $response = execute zuora_check_user_intent
+  if $response.is_blocked
+    bot refuse zuora policy
+    stop
+
+define flow zuora check agent output
+  $response = execute zuora_check_agent_output
+  if $response.is_blocked
+    bot refuse zuora output
+    stop
+
+define flow zuora check planned action
+  $response = execute zuora_check_planned_action
+  if $response.is_blocked
+    bot refuse zuora action
+    stop
